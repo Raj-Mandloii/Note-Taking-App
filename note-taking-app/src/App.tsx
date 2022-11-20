@@ -51,7 +51,7 @@ function App() {
 
       <Routes>
 
-        <Route path="/" element={<NoteList availableTags={tags}/>} />
+        <Route path="/" element={<NoteList notes={notesWithTags} availableTags={tags}/>} />
 
         <Route path="/new" element={<NewNote onSubmit={onCreateNote} onAddTag={addTag} availableTag={tags}/>}  />
 
