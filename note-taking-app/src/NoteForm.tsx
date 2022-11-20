@@ -1,10 +1,9 @@
 import { useRef, useState } from "react";
 import { Form, Stack, Row, Col, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CreatableReactSelect from "react-select/creatable"
 import { NoteData, Tag } from "./App";
 import { v4 as uuidv4 } from 'uuid';
-
 type NoteFormProps = {
     onSubmit: (data: NoteData) => void
     onAddTag : (tag:Tag) => void
@@ -15,6 +14,7 @@ export const NoteForm = ({ onSubmit ,onAddTag,availableTags}: NoteFormProps) => 
     const markdownRef = useRef<HTMLTextAreaElement>(null);
     const [selectedTag, setSelectedTag] = useState<Tag[]>([])
     // function handleSubmit (e: FormEvent) {
+    const navigate = useNavigate();
     function handleSubmit(e: any) {
         e.preventDefault();
         onSubmit({
@@ -22,6 +22,7 @@ export const NoteForm = ({ onSubmit ,onAddTag,availableTags}: NoteFormProps) => 
             markdown: markdownRef.current!.value,
             tags: selectedTag,
         });
+        navigate("..")
     }
     return <Form onSubmit={handleSubmit}>
         <Stack gap={4}>
