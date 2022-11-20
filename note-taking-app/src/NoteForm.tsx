@@ -4,14 +4,19 @@ import { Link, useNavigate } from "react-router-dom";
 import CreatableReactSelect from "react-select/creatable"
 import { Note, NoteData, Tag } from "./App";
 import { v4 as uuidv4 } from 'uuid';
+
+
 type NoteFormProps = {
     onSubmit: (data: NoteData) => void
     onAddTag: (tag: Tag) => void
     availableTags: Tag[]
 } & Partial<NoteData>
+
+
 export const NoteForm = ({ onSubmit, onAddTag, availableTags,
-    title="", markdown="",tags=[]
+    title = "", markdown = "", tags = []
 }: NoteFormProps) => {
+    
     const titleRef = useRef<HTMLInputElement>(null)
     const markdownRef = useRef<HTMLTextAreaElement>(null);
     const [selectedTag, setSelectedTag] = useState<Tag[]>([])
@@ -32,7 +37,7 @@ export const NoteForm = ({ onSubmit, onAddTag, availableTags,
                 <Col>
                     <Form.Group controlId="title">
                         <Form.Label>Title</Form.Label>
-                        <Form.Control ref={titleRef} required defaultValue={title}/>
+                        <Form.Control ref={titleRef} required defaultValue={title} />
 
                     </Form.Group>
                 </Col>
@@ -40,7 +45,7 @@ export const NoteForm = ({ onSubmit, onAddTag, availableTags,
                     <Form.Group controlId="tags">
                         <Form.Label>Tags</Form.Label>
                         <CreatableReactSelect
-                        // defaultInputValue={tags}
+                            // defaultInputValue={tags}
                             onCreateOption={label => {
                                 const newtag = { id: uuidv4(), label }
                                 onAddTag(newtag)
@@ -72,7 +77,7 @@ export const NoteForm = ({ onSubmit, onAddTag, availableTags,
             </Row>
             <Form.Group controlId="markdown">
                 <Form.Label>Body</Form.Label>
-                <Form.Control ref={markdownRef} required as="textarea" rows={15}  defaultValue={markdown}/>
+                <Form.Control ref={markdownRef} required as="textarea" rows={15} defaultValue={markdown} />
 
             </Form.Group>
             <Stack direction="horizontal" gap={2} className="justify-content-end">

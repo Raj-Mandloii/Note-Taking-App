@@ -50,6 +50,23 @@ function App() {
     setTags(prev => [...prev, tag])
   }
 
+  function updateTag(id: string, label: string) {
+    setNotes(prev => {
+      return prev.map(tag => {
+        if (tag.id === id) {
+          return { ...tag, label }
+        } else {
+          return tag
+        }
+      })
+    })
+  }
+  function deleteTag(id: string) {
+    setNotes(prev => {
+      return prev.filter(note => note.id !== id)
+    })
+  }
+
   function onUpdateNote(id: string, { tags, ...data }: NoteData) {
     setNotes(prevNote => {
       return prevNote.map(note => {
@@ -62,10 +79,10 @@ function App() {
       // return [...prevNote, { ...data, id: uuidv4(), tagIds: tags.map(tag => tag.id) }]
     })
   }
-  
-  function deleteNote (id:string){
-    setNotes(prev=>{
-      return prev.filter(note=> note.id !== id )
+
+  function deleteNote(id: string) {
+    setNotes(prev => {
+      return prev.filter(note => note.id !== id)
     })
   }
   return (
@@ -74,6 +91,8 @@ function App() {
       <Routes>
 
         <Route path="/" element={<NoteList
+          onUpdateTag={updateTag} onDeleteTag={deleteTag}
+
           notes={notesWithTags} availableTags={tags} />} />
 
         <Route path="/new"
@@ -82,7 +101,7 @@ function App() {
 
         <Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
 
-          <Route index element={<Note onDeleteNote={deleteNote}/>} />
+          <Route index element={<Note onDeleteNote={deleteNote} />} />
           <Route path="edit" element={<EditNote
             onSubmit={onUpdateNote}
             onAddTag={addTag} availableTag={tags}

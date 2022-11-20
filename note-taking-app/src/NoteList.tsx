@@ -7,6 +7,8 @@ import styles from "./NoteList.module.css"
 type NoteListProp = {
     availableTags: Tag[]
     notes: SimpleNote[]
+    onDeleteTag: (id: string) => void
+    onUpdateTag: (id: string, label: string) => void
 }
 
 type SimpleNote = {
@@ -16,14 +18,16 @@ type SimpleNote = {
 }
 
 type EditTagsModalProps = {
-    show:boolean
-    availableTags:Tag[]
-    handleClose:()=> void
+    show: boolean
+    availableTags: Tag[]
+    handleClose: () => void
+    onDeleteTag: (id: string) => void
+    onUpdateTag: (id: string, label: string) => void
 }
-export const NoteList = ({ availableTags, notes }: NoteListProp) => {
+export const NoteList = ({ availableTags, notes, onUpdateTag, onDeleteTag }: NoteListProp) => {
     const [selectedTag, setSelectedTag] = useState<Tag[]>([]);
     const [title, setTitle] = useState("")
-    const [modalOpen,setModalOpen] = useState(false)
+    const [modalOpen, setModalOpen] = useState(false)
     const filterNotes = useMemo(() => {
         return notes.filter(note => {
             return (title === "" ||
@@ -45,11 +49,11 @@ export const NoteList = ({ availableTags, notes }: NoteListProp) => {
                         <Link to="/new">
                             <Button variant='primary'>Create</Button>
                         </Link>
-                        <Button 
-                        onClick={()=>{
-                            setModalOpen(true)
-                        }}
-                        variant='outline-secondary'>Edit Tags</Button>
+                        <Button
+                            onClick={() => {
+                                setModalOpen(true)
+                            }}
+                            variant='outline-secondary'>Edit Tags</Button>
 
                     </Stack>
                 </Col>
@@ -104,9 +108,13 @@ export const NoteList = ({ availableTags, notes }: NoteListProp) => {
                     </Col>
                 ))}
             </Row>
-            <EditTagModal show={modalOpen} availableTags={availableTags} handleClose={
-                ()=>setModalOpen(false)
-            }/>
+            <EditTagModal
+                onDeleteTag={onDeleteTag}
+                onUpdateTag={onUpdateTag}
+                show={modalOpen}
+                availableTags={availableTags} handleClose={
+                    () => setModalOpen(false)
+                } />
         </>
     )
 }
@@ -134,7 +142,9 @@ function NoteCard({ id, title, tags }: SimpleNote) {
     </Card>
 }
 
-function EditTagModal({ availableTags,show,handleClose}:EditTagsModalProps) {
+function EditTagModal({ availableTags, show, handleClose,
+    onDeleteTag, onUpdateTag
+}: EditTagsModalProps) {
     return <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
             <Modal.Title>Edit Tags</Modal.Title>
@@ -145,12 +155,14 @@ function EditTagModal({ availableTags,show,handleClose}:EditTagsModalProps) {
                     {availableTags.map(tag => (
                         <Row key={tag.id}>
                             <Col>
-                            <Form.Control type='text' value={tag.label}
-                            
-                            />
+                                <Form.Control type='text' value={tag.label}
+                                    onChange={e => onUpdateTag(tag.id, e.target.value)}
+                                />
                             </Col>
                             <Col xs="auto">
-                                <Button variant='outline-danger'>&times;</Button>
+                                <Button 
+                                onChange={()=>onDeleteTag(tag.id)}
+                                variant='outline-danger'>&times;</Button>
                             </Col>
                         </Row>
                     ))}
