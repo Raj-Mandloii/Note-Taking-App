@@ -161,7 +161,7 @@ function EditTagModal({ availableTags, show, handleClose,
                             </Col>
                             <Col xs="auto">
                                 <Button 
-                                onChange={()=>onDeleteTag(tag.id)}
+                                onClick={()=>onDeleteTag(tag.id)}
                                 variant='outline-danger'>&times;</Button>
                             </Col>
                         </Row>

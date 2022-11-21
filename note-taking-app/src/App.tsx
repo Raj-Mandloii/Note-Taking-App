@@ -51,7 +51,7 @@ function App() {
   }
 
   function updateTag(id: string, label: string) {
-    setNotes(prev => {
+    setTags(prev => {
       return prev.map(tag => {
         if (tag.id === id) {
           return { ...tag, label }
@@ -62,8 +62,8 @@ function App() {
     })
   }
   function deleteTag(id: string) {
-    setNotes(prev => {
-      return prev.filter(note => note.id !== id)
+    setTags(prev => {
+      return prev.filter(tag => tag.id !== id)
     })
   }
 
